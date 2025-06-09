@@ -469,8 +469,7 @@
                     }
                 });
             }
-            // ************ AGGIUNTA IMPORTANTE QUI PER LA MAPPA ************
-            // Aggiorna l'attribuzione della mappa di Leaflet se la mappa è già inizializzata
+            // Aggiorna l'attribuzione della mappa di Leaflet
             if (map && map.attributionControl) {
                 map.attributionControl.setPrefix(translations['map_attribution'] || '© OpenStreetMap contributors');
             }
@@ -498,7 +497,7 @@
             }
         }
 
-        // Cerca luoghi usando Nominatim API
+        // Cerca luoghi usando Nominatim API (Photon rimosso per garantire la lingua)
         async function searchPlaces(query) {
             if (query.length < 3) {
                 hideSearchResults();
@@ -507,36 +506,9 @@
 
             try {
                 showLoadingIndicator();
-                let results = [];
-
-                // Tentativo con Photon API
-                try {
-                    let response = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`);
-                    if (!response.ok) throw new Error("Photon API failed");
-                    const data = await response.json();
-                    results = data.features.map(feature => ({
-                        display_name: feature.properties.name + 
-                            (feature.properties.city ? `, ${feature.properties.city}` : '') + 
-                            (feature.properties.country ? `, ${feature.properties.country}` : ''),
-                        lat: feature.geometry.coordinates[1],
-                        lon: feature.geometry.coordinates[0]
-                    }));
-                } catch (photonError) {
-                    console.warn("Photon API non disponibile o fallita:", photonError);
-                }
-
-                // Se Photon ha dato 0 risultati o è fallito, fallback su Nominatim
-                if (results.length === 0) {
-                    console.log("Nessun risultato da Photon o Photon fallito. Provo Nominatim...");
-                    try {
-                        const nominatimResults = await fetchNominatimFallback(query);
-                        results = nominatimResults;
-                    } catch (nominatimError) {
-                        console.error("Nominatim fallback fallito:", nominatimError);
-                        showSearchError(translations['search_error_not_available'] || "Automatic search is not available. Please enter coordinates manually.");
-                        return;
-                    }
-                }
+                
+                // Utilizza solo Nominatim per garantire la traduzione dei risultati
+                const results = await fetchNominatim(query);
 
                 if (!Array.isArray(results) || results.length === 0) {
                     showSearchError(translations['search_error_no_results'] || "No results found. Try a different name or enter coordinates manually.");
@@ -552,7 +524,8 @@
             }
         }
 
-        async function fetchNominatimFallback(query) {
+        // Funzione dedicata a Nominatim
+        async function fetchNominatim(query) {
             try {
                 const response = await fetch(
                     `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(query)}&addressdetails=1&accept-language=${document.documentElement.lang || 'en'}`, // Usa la lingua corrente
@@ -578,7 +551,7 @@
                     lon: parseFloat(result.lon)
                 }));
             } catch (e) {
-                console.error("Errore nel fallback Nominatim:", e);
+                console.error("Errore nel Nominatim:", e);
                 throw e; // Rilancia l'errore per gestirlo in searchPlaces
             }
         }
@@ -735,16 +708,16 @@
         // Aggiorna lista coordinate
         function updateCoordinatesList() {
             const list = document.getElementById('coordinatesList');
-            const countSpan = document.getElementById('coordinateCount'); // Rinominato per chiarezza, era già corretto nell'HTML
+            const countSpan = document.getElementById('coordinateCount'); 
             
             // VERIFICA IMPORTANTE: assicurati che gli elementi esistano prima di accedervi
             if (!countSpan) {
                 console.error("Errore: Elemento con ID 'coordinateCount' non trovato nel DOM. Impossibile aggiornare il conteggio.");
-                return; // Esce dalla funzione se l'elemento non c'è
+                return; 
             }
             if (!list) {
                 console.error("Errore: Elemento con ID 'coordinatesList' non trovato nel DOM. Impossibile aggiornare la lista.");
-                return; // Esce dalla funzione se l'elemento non c'è
+                return; 
             }
 
             countSpan.textContent = coordinates.length;
