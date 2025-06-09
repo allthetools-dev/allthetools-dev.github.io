@@ -421,7 +421,7 @@
 
         // --- INIZIO: Codice per la Traduzione ---
         const translations = {};
-        const defaultLanguage = 'en'; // Lingua predefinita ora è inglese
+        const defaultLanguage = 'en'; // Lingua predefinita
 
         async function loadTranslations(lang) {
             try {
@@ -437,6 +437,7 @@
             } catch (error) {
                 console.error("Error loading translations:", error);
                 // Fallback a una lingua di default o un messaggio di errore se il file non viene trovato
+                // Potresti voler mostrare un messaggio all'utente qui
             }
         }
 
