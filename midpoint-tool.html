@@ -5,6 +5,7 @@
     <title data-translate="tool_page_title">Geographic Midpoint Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" />
     <style>
+        /* CSS COMPLETO PER MIDPOINT-TOOL.HTML */
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +13,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -426,7 +427,7 @@
             try {
                 const response = await fetch(`./lang/${lang}.json`);
                 if (!response.ok) {
-                    throw new Error(`Could not load translations for ${lang}`);
+                    throw new Error(`Could not load translations for ${lang}. Status: ${response.status}`);
                 }
                 const data = await response.json();
                 Object.assign(translations, data);
@@ -435,7 +436,7 @@
                 localStorage.setItem('lang', lang);
             } catch (error) {
                 console.error("Error loading translations:", error);
-                // Fallback alla lingua predefinita o a un messaggio di errore se il file non viene trovato
+                // Fallback a una lingua di default o un messaggio di errore se il file non viene trovato
             }
         }
 
@@ -468,7 +469,8 @@
                     }
                 });
             }
-            // Aggiorna l'attribuzione della mappa di Leaflet
+            // ************ AGGIUNTA IMPORTANTE QUI PER LA MAPPA ************
+            // Aggiorna l'attribuzione della mappa di Leaflet se la mappa è già inizializzata
             if (map && map.attributionControl) {
                 map.attributionControl.setPrefix(translations['map_attribution'] || '© OpenStreetMap contributors');
             }
@@ -670,7 +672,6 @@
             hideError();
 
             // Aggiorna visualizzazione
-            console.log('Coordinate added via search:', { lat, lng, name: result.display_name.split(',')[0].trim() }); // DEBUG LOG
             updateCoordinatesList();
             addMarkerToMap(lat, lng);
         }
@@ -715,7 +716,6 @@
             hideError();
 
             // Aggiorna visualizzazione
-            console.log('Coordinate added manually:', { lat, lng }); // DEBUG LOG
             updateCoordinatesList();
             addMarkerToMap(lat, lng);
         }
@@ -735,25 +735,22 @@
         // Aggiorna lista coordinate
         function updateCoordinatesList() {
             const list = document.getElementById('coordinatesList');
-            const count = document.getElementById('coordinateCount');
-            
-            console.log('updateCoordinatesList called. Current coordinates array:', coordinates); // DEBUG LOG
+            const countSpan = document.getElementById('coordinateCount'); // Rinominato per chiarezza, era già corretto nell'HTML
             
             // VERIFICA IMPORTANTE: assicurati che gli elementi esistano prima di accedervi
-            if (!count) {
-                console.error("Errore: Elemento con ID 'coordinateCount' non trovato nel DOM.");
+            if (!countSpan) {
+                console.error("Errore: Elemento con ID 'coordinateCount' non trovato nel DOM. Impossibile aggiornare il conteggio.");
                 return; // Esce dalla funzione se l'elemento non c'è
             }
             if (!list) {
-                console.error("Errore: Elemento con ID 'coordinatesList' non trovato nel DOM.");
+                console.error("Errore: Elemento con ID 'coordinatesList' non trovato nel DOM. Impossibile aggiornare la lista.");
                 return; // Esce dalla funzione se l'elemento non c'è
             }
 
-            count.textContent = coordinates.length;
+            countSpan.textContent = coordinates.length;
 
             if (coordinates.length === 0) {
                 list.innerHTML = `<p style="text-align: center; color: #64748b; font-style: italic;" data-translate="coords_list_placeholder">${translations['coords_list_placeholder'] || 'No coordinates entered'}</p>`;
-                console.log('List cleared: No coordinates present.'); // DEBUG LOG
                 return;
             }
 
@@ -774,14 +771,11 @@
             }).join('');
             
             list.innerHTML = newHtml;
-            console.log('List HTML updated. New HTML:', newHtml); // DEBUG LOG
-            // applyTranslations(); // Rimosso: gli elementi dinamici non hanno data-translate
         }
 
         // Rimuovi coordinata
         function removeCoordinate(index) {
             coordinates.splice(index, 1);
-            console.log('Coordinate removed. New coordinates array:', coordinates); // DEBUG LOG
             updateCoordinatesList();
             updateMap();
         }
@@ -935,7 +929,7 @@
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // --- INIZIO: Codice per la Traduzione (COPIA QUI LO STESSO SCRIPT DI TRADUZIONE DELL'INDEX.HTML) ---
+            // Carica le traduzioni all'avvio
             const savedLang = localStorage.getItem('lang') || defaultLanguage;
             const langSelect = document.getElementById('language-select');
             
@@ -945,12 +939,8 @@
                     loadTranslations(event.target.value);
                 });
             }
-            loadTranslations(savedLang); // Carica le traduzioni all'avvio
+            loadTranslations(savedLang); 
 
-            // --- FINE: Codice per la Traduzione ---
-
-            console.log('DOM caricato');
-            
             // Inizializza la mappa
             setTimeout(initMap, 100);
             
