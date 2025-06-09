@@ -5,7 +5,6 @@
     <title data-translate="tool_page_title">Geographic Midpoint Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" />
     <style>
-        /* ... (Il tuo CSS esistente rimane invariato) ... */
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +12,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -671,6 +670,7 @@
             hideError();
 
             // Aggiorna visualizzazione
+            console.log('Coordinate added via search:', { lat, lng, name: result.display_name.split(',')[0].trim() }); // DEBUG LOG
             updateCoordinatesList();
             addMarkerToMap(lat, lng);
         }
@@ -715,6 +715,7 @@
             hideError();
 
             // Aggiorna visualizzazione
+            console.log('Coordinate added manually:', { lat, lng }); // DEBUG LOG
             updateCoordinatesList();
             addMarkerToMap(lat, lng);
         }
@@ -736,15 +737,29 @@
             const list = document.getElementById('coordinatesList');
             const count = document.getElementById('coordinateCount');
             
+            console.log('updateCoordinatesList called. Current coordinates array:', coordinates); // DEBUG LOG
+            
+            // VERIFICA IMPORTANTE: assicurati che gli elementi esistano prima di accedervi
+            if (!count) {
+                console.error("Errore: Elemento con ID 'coordinateCount' non trovato nel DOM.");
+                return; // Esce dalla funzione se l'elemento non c'è
+            }
+            if (!list) {
+                console.error("Errore: Elemento con ID 'coordinatesList' non trovato nel DOM.");
+                return; // Esce dalla funzione se l'elemento non c'è
+            }
+
             count.textContent = coordinates.length;
 
             if (coordinates.length === 0) {
                 list.innerHTML = `<p style="text-align: center; color: #64748b; font-style: italic;" data-translate="coords_list_placeholder">${translations['coords_list_placeholder'] || 'No coordinates entered'}</p>`;
+                console.log('List cleared: No coordinates present.'); // DEBUG LOG
                 return;
             }
 
-            list.innerHTML = coordinates.map((coord, index) => {
-                const displayName = coord.name || `${(translations['tool_page_title'].split(' ')[0] || 'Point')} ${index + 1}`; // Usare un nome tradotto per "Punto"
+            const newHtml = coordinates.map((coord, index) => {
+                // Se la proprietà 'name' non esiste, usa un fallback tradotto o "Point X"
+                const displayName = coord.name || `${(translations['tool_page_point_prefix'] || 'Point')} ${index + 1}`; 
                 const coordString = `${coord.lat.toFixed(6)}, ${coord.lng.toFixed(6)}`;
                 
                 return `
@@ -757,12 +772,16 @@
                     </div>
                 `;
             }).join('');
-            applyTranslations(); // Applica traduzioni anche ai nuovi elementi dinamici se necessario
+            
+            list.innerHTML = newHtml;
+            console.log('List HTML updated. New HTML:', newHtml); // DEBUG LOG
+            // applyTranslations(); // Rimosso: gli elementi dinamici non hanno data-translate
         }
 
         // Rimuovi coordinata
         function removeCoordinate(index) {
             coordinates.splice(index, 1);
+            console.log('Coordinate removed. New coordinates array:', coordinates); // DEBUG LOG
             updateCoordinatesList();
             updateMap();
         }
