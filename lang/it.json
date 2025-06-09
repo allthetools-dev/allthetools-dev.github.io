@@ -1,0 +1,49 @@
+{
+    "homepage_title": "AllTheTools",
+    "homepage_subtitle": "La tua suite di strumenti utili per la vita quotidiana, sviluppati con passione e precisione. Esplora i nostri tool:",
+    "tool_midpoint_title": "Calcolatore Punto Medio Geografico",
+    "tool_midpoint_description": "Trova il punto medio geografico di più coordinate sulla mappa.",
+
+    "tool_page_title": "Calcolatore Punto Medio Geografico",
+    "tool_page_description": "Trova il punto medio geografico di più coordinate sulla mappa",
+
+    "search_section_title": "Cerca Luoghi",
+    "search_input_placeholder": "es. Milano, Italia",
+    "search_info_text": "Cerca un luogo per nome e selezionalo dalla lista",
+    "manual_coords_title": "Inserisci Coordinate Manualmente",
+    "label_latitude": "Latitudine:",
+    "label_longitude": "Longitudine:",
+    "input_lat_placeholder": "es. 45.4642",
+    "input_lng_placeholder": "es. 9.1900",
+    "add_button": "+ Aggiungi",
+    "calculate_button": "🧮 Calcola Punto Medio",
+    "error_manual_coords_invalid": "Inserisci valori numerici validi per latitudine e longitudine",
+    "error_latitude_range": "La latitudine deve essere tra -90 e 90 gradi",
+    "error_longitude_range": "La longitudine deve essere tra -180 e 180 gradi",
+    "error_min_coords": "Inserisci almeno 2 coordinate per calcolare il punto medio",
+    "error_coords_too_dispersed": "Le coordinate sono troppo disperse per calcolare un punto medio significativo",
+
+    "coords_list_title": "Coordinate Inserite",
+    "coords_list_placeholder": "Nessuna coordinata inserita",
+    "midpoint_results_title": "Punto Medio Calcolato",
+    "result_latitude": "Latitudine:",
+    "result_longitude": "Longitudine:",
+    "result_coordinates": "Coordinate:",
+
+    "search_loading": "🔍 Ricerca in corso...",
+    "search_error_not_available": "La ricerca automatica non è disponibile. Inserisci le coordinate manualmente.",
+    "search_error_no_results": "Nessun risultato trovato. Riprova con un nome diverso o inserisci le coordinate manualmente.",
+    "search_error_generic": "Si è verificato un errore durante la ricerca. Riprova più tardi.",
+    "search_error_invalid_coords_for_result": "Coordinate non valide per questo risultato",
+    "search_error_too_many_requests": "Troppe richieste. Riprova tra un po'.",
+
+    "map_not_ready_marker": "Mappa non ancora pronta per aggiungere marker",
+    "map_not_ready_update": "Mappa non ancora pronta per l'aggiornamento",
+    "map_not_ready_midpoint": "Mappa non ancora pronta per aggiungere il punto medio",
+    "map_attribution": "© OpenStreetMap contributors",
+    "midpoint_popup_title": "🎯 Punto Medio Geografico",
+
+    "lang_select_label": "Lingua:",
+    "lang_italian": "Italiano",
+    "lang_english": "Inglese"
+}

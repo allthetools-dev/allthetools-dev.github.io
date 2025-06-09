@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="it">
-<head>
+<html lang="it"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AllTheTools - La tua suite di strumenti utili</title>
+    <title data-translate="homepage_title">AllTheTools</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -25,6 +24,33 @@
             max-width: 800px;
             margin: 20px;
             backdrop-filter: blur(10px);
+            position: relative; /* Per posizionare il selettore lingua */
+        }
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 5px 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .language-selector label {
+            font-size: 0.9rem;
+            color: #555;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+        .language-selector select {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px 8px;
+            font-size: 0.9rem;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
         }
         h1 {
             font-size: 3rem;
@@ -92,21 +118,101 @@
             .container {
                 padding: 30px 20px;
             }
+            .language-selector {
+                top: 10px;
+                right: 10px;
+                padding: 3px 8px;
+            }
+            .language-selector label {
+                font-size: 0.8rem;
+            }
+            .language-selector select {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AllTheTools</h1>
-        <p>La tua suite di strumenti utili per la vita quotidiana, sviluppati con passione e precisione. Esplora i nostri tool:</p>
+        <div class="language-selector">
+            <label for="language-select" data-translate="lang_select_label">Lingua:</label>
+            <select id="language-select">
+                <option value="it" data-translate="lang_italian">Italiano</option>
+                <option value="en" data-translate="lang_english">Inglese</option>
+            </select>
+        </div>
+
+        <h1 data-translate="homepage_title">AllTheTools</h1>
+        <p data-translate="homepage_subtitle">La tua suite di strumenti utili per la vita quotidiana, sviluppati con passione e precisione. Esplora i nostri tool:</p>
 
         <div class="tool-grid">
             <a href="midpoint-tool.html" class="tool-card">
                 <span class="tool-icon">🌍</span>
-                <h2>Calcolatore Punto Medio Geografico</h2>
-                <p>Trova il punto medio geografico di più coordinate sulla mappa.</p>
+                <h2 data-translate="tool_midpoint_title">Calcolatore Punto Medio Geografico</h2>
+                <p data-translate="tool_midpoint_description">Trova il punto medio geografico di più coordinate sulla mappa.</p>
             </a>
-            </div>
+        </div>
     </div>
+
+    <script>
+        const translations = {};
+        const defaultLanguage = 'it'; // Lingua predefinita se non salvata
+
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`./lang/${lang}.json`);
+                if (!response.ok) {
+                    throw new Error(`Could not load translations for ${lang}`);
+                }
+                const data = await response.json();
+                Object.assign(translations, data); // Carica le traduzioni nel nostro oggetto globale
+                applyTranslations();
+                document.documentElement.lang = lang; // Imposta l'attributo lang dell'html
+                localStorage.setItem('lang', lang); // Salva la lingua preferita
+            } catch (error) {
+                console.error("Error loading translations:", error);
+                // Fallback alla lingua predefinita o a un messaggio di errore
+            }
+        }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[key];
+                    } else if (element.tagName === 'TITLE') {
+                        document.title = translations[key];
+                    } else {
+                        element.textContent = translations[key];
+                    }
+                }
+            });
+            // Aggiorna anche le opzioni del selettore lingua per essere sicuri
+            const langSelect = document.getElementById('language-select');
+            if (langSelect) {
+                Array.from(langSelect.options).forEach(option => {
+                    const key = option.getAttribute('data-translate');
+                    if (translations[key]) {
+                        option.textContent = translations[key];
+                    }
+                });
+            }
+        }
+
+        // Inizializzazione della lingua
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('lang') || defaultLanguage;
+            const langSelect = document.getElementById('language-select');
+            
+            if (langSelect) {
+                langSelect.value = savedLang;
+                langSelect.addEventListener('change', (event) => {
+                    loadTranslations(event.target.value);
+                });
+            }
+            loadTranslations(savedLang); // Carica le traduzioni all'avvio
+        });
+    </script>
 </body>
 </html>

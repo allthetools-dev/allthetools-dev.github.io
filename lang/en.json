@@ -1,0 +1,49 @@
+{
+    "homepage_title": "AllTheTools",
+    "homepage_subtitle": "Your suite of useful tools for everyday life, developed with passion and precision. Explore our tools:",
+    "tool_midpoint_title": "Geographic Midpoint Calculator",
+    "tool_midpoint_description": "Find the geographic midpoint of multiple coordinates on a map.",
+
+    "tool_page_title": "Geographic Midpoint Calculator",
+    "tool_page_description": "Find the geographic midpoint of multiple coordinates on a map",
+
+    "search_section_title": "Search Places",
+    "search_input_placeholder": "e.g. Milan, Italy",
+    "search_info_text": "Search for a place by name and select it from the list",
+    "manual_coords_title": "Enter Coordinates Manually",
+    "label_latitude": "Latitude:",
+    "label_longitude": "Longitude:",
+    "input_lat_placeholder": "e.g. 45.4642",
+    "input_lng_placeholder": "e.g. 9.1900",
+    "add_button": "+ Add",
+    "calculate_button": "🧮 Calculate Midpoint",
+    "error_manual_coords_invalid": "Please enter valid numeric values for latitude and longitude",
+    "error_latitude_range": "Latitude must be between -90 and 90 degrees",
+    "error_longitude_range": "Longitude must be between -180 and 180 degrees",
+    "error_min_coords": "Please enter at least 2 coordinates to calculate the midpoint",
+    "error_coords_too_dispersed": "Coordinates are too dispersed to calculate a meaningful midpoint",
+
+    "coords_list_title": "Entered Coordinates",
+    "coords_list_placeholder": "No coordinates entered",
+    "midpoint_results_title": "Calculated Midpoint",
+    "result_latitude": "Latitude:",
+    "result_longitude": "Longitude:",
+    "result_coordinates": "Coordinates:",
+
+    "search_loading": "🔍 Searching...",
+    "search_error_not_available": "Automatic search is not available. Please enter coordinates manually.",
+    "search_error_no_results": "No results found. Try a different name or enter coordinates manually.",
+    "search_error_generic": "An error occurred during the search. Please try again later.",
+    "search_error_invalid_coords_for_result": "Invalid coordinates for this result",
+    "search_error_too_many_requests": "Too many requests. Please try again later.",
+
+    "map_not_ready_marker": "Map not ready to add marker",
+    "map_not_ready_update": "Map not ready for update",
+    "map_not_ready_midpoint": "Map not ready to add midpoint",
+    "map_attribution": "© OpenStreetMap contributors",
+    "midpoint_popup_title": "🎯 Geographic Midpoint",
+
+    "lang_select_label": "Language:",
+    "lang_italian": "Italian",
+    "lang_english": "English"
+}

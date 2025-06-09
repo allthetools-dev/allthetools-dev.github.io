@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="it">
-<head>
+<html lang="it"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcolatore Punto Medio Geografico</title>
+    <title data-translate="tool_page_title">Calcolatore Punto Medio Geografico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" />
     <style>
+        /* ... (Il tuo CSS esistente rimane invariato) ... */
         * {
             margin: 0;
             padding: 0;
@@ -27,6 +27,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             backdrop-filter: blur(10px);
+            position: relative; /* Per il selettore lingua */
         }
 
         .header {
@@ -277,6 +278,34 @@
             font-style: italic;
         }
 
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 5px 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1001; /* Sopra la mappa e altri elementi */
+        }
+        .language-selector label {
+            font-size: 0.9rem;
+            color: #555;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+        .language-selector select {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px 8px;
+            font-size: 0.9rem;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+        }
+
         @media (max-width: 768px) {
             .content {
                 grid-template-columns: 1fr;
@@ -295,61 +324,81 @@
                 min-width: auto;
                 margin-bottom: 5px;
             }
+
+            .language-selector {
+                top: 10px;
+                right: 10px;
+                padding: 3px 8px;
+            }
+            .language-selector label {
+                font-size: 0.8rem;
+            }
+            .language-selector select {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="language-selector">
+            <label for="language-select" data-translate="lang_select_label">Lingua:</label>
+            <select id="language-select">
+                <option value="it" data-translate="lang_italian">Italiano</option>
+                <option value="en" data-translate="lang_english">Inglese</option>
+            </select>
+        </div>
+
         <div class="header">
-            <h1>🌍 Calcolatore Punto Medio Geografico</h1>
-            <p>Trova il punto medio geografico di più coordinate sulla mappa</p>
+            <h1 data-translate="tool_page_title">🌍 Calcolatore Punto Medio Geografico</h1>
+            <p data-translate="tool_page_description">Trova il punto medio geografico di più coordinate sulla mappa</p>
         </div>
 
         <div class="content">
             <div class="left-panel">
                 <div class="input-section">
-                    <h3>🔍 Cerca Luoghi</h3>
+                    <h3 data-translate="search_section_title">🔍 Cerca Luoghi</h3>
                     <div class="search-container">
-                        <input type="text" id="searchInput" placeholder="es. Milano, Italia" autocomplete="off" />
+                        <input type="text" id="searchInput" data-translate="search_input_placeholder" placeholder="es. Milano, Italia" autocomplete="off" />
                         <div id="searchResults" class="search-results"></div>
                     </div>
-                    <p style="font-size: 0.9rem; color: #64748b; margin-top: 8px;">Cerca un luogo per nome e selezionalo dalla lista</p>
+                    <p style="font-size: 0.9rem; color: #64748b; margin-top: 8px;" data-translate="search_info_text">Cerca un luogo per nome e selezionalo dalla lista</p>
                 </div>
 
                 <div class="input-section">
-                    <h3>📍 Inserisci Coordinate Manualmente</h3>
+                    <h3 data-translate="manual_coords_title">📍 Inserisci Coordinate Manualmente</h3>
                     <div class="coordinate-input">
-                        <label>Latitudine:</label>
-                        <input type="number" id="latInput" step="any" placeholder="es. 45.4642" />
+                        <label data-translate="label_latitude">Latitudine:</label>
+                        <input type="number" id="latInput" step="any" data-translate="input_lat_placeholder" placeholder="es. 45.4642" />
                     </div>
                     <div class="coordinate-input">
-                        <label>Longitudine:</label>
-                        <input type="number" id="lngInput" step="any" placeholder="es. 9.1900" />
+                        <label data-translate="label_longitude">Longitudine:</label>
+                        <input type="number" id="lngInput" step="any" data-translate="input_lng_placeholder" placeholder="es. 9.1900" />
                     </div>
                     <div>
-                        <button class="btn btn-add" onclick="addCoordinate()">+ Aggiungi</button>
-                        <button class="btn" onclick="calculateMidpoint()">🧮 Calcola Punto Medio</button>
+                        <button class="btn btn-add" onclick="addCoordinate()" data-translate="add_button">+ Aggiungi</button>
+                        <button class="btn" onclick="calculateMidpoint()" data-translate="calculate_button">🧮 Calcola Punto Medio</button>
                     </div>
                     <div id="error" class="error" style="display: none;"></div>
                 </div>
 
                 <div class="input-section">
-                    <h3>📋 Coordinate Inserite (<span id="coordinateCount">0</span>)</h3>
+                    <h3 data-translate="coords_list_title">📋 Coordinate Inserite (<span id="coordinateCount">0</span>)</h3>
                     <div class="coordinates-list" id="coordinatesList">
-                        <p style="text-align: center; color: #64748b; font-style: italic;">Nessuna coordinata inserita</p>
+                        <p style="text-align: center; color: #64748b; font-style: italic;" data-translate="coords_list_placeholder">Nessuna coordinata inserita</p>
                     </div>
                 </div>
 
                 <div id="results" class="results" style="display: none;">
-                    <h4>🎯 Punto Medio Calcolato</h4>
+                    <h4 data-translate="midpoint_results_title">🎯 Punto Medio Calcolato</h4>
                     <div class="coordinate-result">
-                        <strong>Latitudine:</strong> <span id="resultLat"></span>
+                        <strong data-translate="result_latitude">Latitudine:</strong> <span id="resultLat"></span>
                     </div>
                     <div class="coordinate-result">
-                        <strong>Longitudine:</strong> <span id="resultLng"></span>
+                        <strong data-translate="result_longitude">Longitudine:</strong> <span id="resultLng"></span>
                     </div>
                     <div class="coordinate-result">
-                        <strong>Coordinate:</strong> <span id="resultCoords"></span>
+                        <strong data-translate="result_coordinates">Coordinate:</strong> <span id="resultCoords"></span>
                     </div>
                 </div>
             </div>
@@ -370,10 +419,60 @@
         let searchTimeout;
         let currentSearchResults = [];
 
+        // --- INIZIO: Codice per la Traduzione (COPIA QUI LO STESSO SCRIPT DI TRADUZIONE DELL'INDEX.HTML) ---
+        const translations = {};
+        const defaultLanguage = 'it'; 
+
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`./lang/${lang}.json`);
+                if (!response.ok) {
+                    throw new Error(`Could not load translations for ${lang}`);
+                }
+                const data = await response.json();
+                Object.assign(translations, data);
+                applyTranslations();
+                document.documentElement.lang = lang;
+                localStorage.setItem('lang', lang);
+            } catch (error) {
+                console.error("Error loading translations:", error);
+            }
+        }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[key];
+                    } else if (element.tagName === 'TITLE') {
+                        document.title = translations[key];
+                    } else {
+                        element.textContent = translations[key];
+                    }
+                }
+            });
+            // Aggiorna le opzioni del selettore lingua e gli errori di Leaflet/map
+            const langSelect = document.getElementById('language-select');
+            if (langSelect) {
+                Array.from(langSelect.options).forEach(option => {
+                    const key = option.getAttribute('data-translate');
+                    if (translations[key]) {
+                        option.textContent = translations[key];
+                    }
+                });
+            }
+            // Aggiorna l'attribuzione della mappa di Leaflet
+            if (map && map.attributionControl) {
+                map.attributionControl.setPrefix(translations['map_attribution'] || '© OpenStreetMap contributors');
+            }
+        }
+        // --- FINE: Codice per la Traduzione ---
+
         // Inizializza la mappa
         function initMap() {
             if (typeof L === 'undefined') {
-                console.log('Leaflet non ancora caricato, riprovo...');
+                console.log(translations['map_not_ready_marker'] || 'Leaflet non ancora caricato, riprovo...');
                 setTimeout(initMap, 100);
                 return;
             }
@@ -381,7 +480,7 @@
             try {
                 map = L.map('map').setView([45.4642, 9.1900], 6);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
+                    attribution: translations['map_attribution'] || '© OpenStreetMap contributors' // Traduci l'attribuzione
                 }).addTo(map);
                 leafletLoaded = true;
                 console.log('Mappa inizializzata correttamente');
@@ -426,13 +525,13 @@
                         results = nominatimResults;
                     } catch (nominatimError) {
                         console.error("Nominatim fallback fallito:", nominatimError);
-                        showSearchError("La ricerca automatica non è disponibile. Inserisci le coordinate manualmente.");
+                        showSearchError(translations['search_error_not_available'] || "La ricerca automatica non è disponibile. Inserisci le coordinate manualmente.");
                         return;
                     }
                 }
 
                 if (!Array.isArray(results) || results.length === 0) {
-                    showSearchError("Nessun risultato trovato. Riprova con un nome diverso o inserisci le coordinate manualmente.");
+                    showSearchError(translations['search_error_no_results'] || "Nessun risultato trovato. Riprova con un nome diverso o inserisci le coordinate manualmente.");
                     return;
                 }
 
@@ -441,14 +540,14 @@
 
             } catch (error) {
                 console.error("Errore generico nella ricerca:", error);
-                showSearchError("Si è verificato un errore durante la ricerca. Riprova più tardi.");
+                showSearchError(translations['search_error_generic'] || "Si è verificato un errore durante la ricerca. Riprova più tardi.");
             }
         }
 
         async function fetchNominatimFallback(query) {
             try {
                 const response = await fetch(
-                    `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(query)}&addressdetails=1&accept-language=it`,
+                    `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(query)}&addressdetails=1&accept-language=${document.documentElement.lang || 'it'}`, // Usa la lingua corrente
                     {
                         headers: {
                             'User-Agent': 'Geographic Midpoint Calculator / 1.0 (your-email@example.com)' // Sostituisci con la tua email
@@ -458,9 +557,9 @@
 
                 if (!response.ok) {
                     if (response.status === 429) {
-                        throw new Error("Troppe richieste. Riprova tra un po'.");
+                        throw new Error(translations['search_error_too_many_requests'] || "Troppe richieste. Riprova tra un po'.");
                     }
-                    throw new Error(`Errore Nominatim: ${response.statusText}`);
+                    throw new Error(`${translations['search_error_generic'] || 'Errore Nominatim'}: ${response.statusText}`);
                 }
 
                 const results = await response.json();
@@ -479,7 +578,7 @@
         // Mostra indicatore di caricamento
         function showLoadingIndicator() {
             const resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = '<div class="loading-indicator">🔍 Ricerca in corso...</div>';
+            resultsDiv.innerHTML = `<div class="loading-indicator">${translations['search_loading'] || '🔍 Ricerca in corso...'}</div>`;
             resultsDiv.style.display = 'block';
         }
 
@@ -500,7 +599,7 @@
             const resultsDiv = document.getElementById('searchResults');
             
             if (results.length === 0) {
-                resultsDiv.innerHTML = '<div class="loading-indicator">Nessun risultato trovato.</div>';
+                resultsDiv.innerHTML = `<div class="loading-indicator">${translations['search_error_no_results'] || 'Nessun risultato trovato.'}</div>`;
                 resultsDiv.style.display = 'block';
                 return;
             }
@@ -548,7 +647,7 @@
             const lng = parseFloat(result.lon);
             
             if (isNaN(lat) || isNaN(lng)) {
-                showError('Coordinate non valide per questo risultato');
+                showError(translations['search_error_invalid_coords_for_result'] || 'Coordinate non valide per questo risultato');
                 return;
             }
             
@@ -586,17 +685,17 @@
 
             // Validazione input
             if (isNaN(lat) || isNaN(lng)) {
-                showError('Inserisci valori numerici validi per latitudine e longitudine');
+                showError(translations['error_manual_coords_invalid'] || 'Inserisci valori numerici validi per latitudine e longitudine');
                 return;
             }
 
             if (lat < -90 || lat > 90) {
-                showError('La latitudine deve essere tra -90 e 90 gradi');
+                showError(translations['error_latitude_range'] || 'La latitudine deve essere tra -90 e 90 gradi');
                 return;
             }
 
             if (lng < -180 || lng > 180) {
-                showError('La longitudine deve essere tra -180 e 180 gradi');
+                showError(translations['error_longitude_range'] || 'La longitudine deve essere tra -180 e 180 gradi');
                 return;
             }
 
@@ -633,12 +732,12 @@
             count.textContent = coordinates.length;
 
             if (coordinates.length === 0) {
-                list.innerHTML = '<p style="text-align: center; color: #64748b; font-style: italic;">Nessuna coordinata inserita</p>';
+                list.innerHTML = `<p style="text-align: center; color: #64748b; font-style: italic;" data-translate="coords_list_placeholder">${translations['coords_list_placeholder'] || 'Nessuna coordinata inserita'}</p>`;
                 return;
             }
 
             list.innerHTML = coordinates.map((coord, index) => {
-                const displayName = coord.name || `Punto ${index + 1}`;
+                const displayName = coord.name || `${(translations['tool_page_title'].split(' ')[0] || 'Punto')} ${index + 1}`; // Usare un nome tradotto per "Punto"
                 const coordString = `${coord.lat.toFixed(6)}, ${coord.lng.toFixed(6)}`;
                 
                 return `
@@ -651,6 +750,7 @@
                     </div>
                 `;
             }).join('');
+            applyTranslations(); // Applica traduzioni anche ai nuovi elementi dinamici se necessario
         }
 
         // Rimuovi coordinata
@@ -663,7 +763,7 @@
         // Aggiungi marker alla mappa
         function addMarkerToMap(lat, lng) {
             if (!leafletLoaded || typeof L === 'undefined') {
-                console.log('Mappa non ancora pronta per aggiungere marker');
+                console.log(translations['map_not_ready_marker'] || 'Mappa non ancora pronta per aggiungere marker');
                 return;
             }
             
@@ -686,7 +786,7 @@
         // Aggiorna mappa
         function updateMap() {
             if (!leafletLoaded || typeof L === 'undefined') {
-                console.log('Mappa non ancora pronta per l\'aggiornamento');
+                console.log(translations['map_not_ready_update'] || 'Mappa non ancora pronta per l\'aggiornamento');
                 return;
             }
             
@@ -724,7 +824,7 @@
         // Calcola punto medio geografico
         function calculateMidpoint() {
             if (coordinates.length < 2) {
-                showError('Inserisci almeno 2 coordinate per calcolare il punto medio');
+                showError(translations['error_min_coords'] || 'Inserisci almeno 2 coordinate per calcolare il punto medio');
                 return;
             }
 
@@ -748,7 +848,7 @@
 
             // Caso speciale: se siamo vicini al centro della terra
             if (Math.abs(x) < 1e-9 && Math.abs(y) < 1e-9 && Math.abs(z) < 1e-9) {
-                showError('Le coordinate sono troppo disperse per calcolare un punto medio significativo');
+                showError(translations['error_coords_too_dispersed'] || 'Le coordinate sono troppo disperse per calcolare un punto medio significativo');
                 return;
             }
 
@@ -777,7 +877,7 @@
         // Aggiungi punto medio alla mappa
         function addMidpointToMap(lat, lng) {
             if (!leafletLoaded || typeof L === 'undefined') {
-                console.log('Mappa non ancora pronta per aggiungere il punto medio');
+                console.log(translations['map_not_ready_midpoint'] || 'Mappa non ancora pronta per aggiungere il punto medio');
                 return;
             }
             
@@ -796,7 +896,7 @@
 
                 midpointMarker = L.marker([lat, lng], { icon: midpointIcon })
                     .addTo(map)
-                    .bindPopup(`<strong>🎯 Punto Medio Geografico</strong><br>Lat: ${lat.toFixed(6)}<br>Lng: ${lng.toFixed(6)}`);
+                    .bindPopup(`<strong>${translations['midpoint_popup_title'] || '🎯 Punto Medio Geografico'}</strong><br>Lat: ${lat.toFixed(6)}<br>Lng: ${lng.toFixed(6)}`);
 
                 // Adatta vista per includere tutti i punti
                 const allMarkers = [...markers, midpointMarker];
@@ -809,6 +909,20 @@
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
+            // --- INIZIO: Codice per la Traduzione (COPIA QUI LO STESSO SCRIPT DI TRADUZIONE DELL'INDEX.HTML) ---
+            const savedLang = localStorage.getItem('lang') || defaultLanguage;
+            const langSelect = document.getElementById('language-select');
+            
+            if (langSelect) {
+                langSelect.value = savedLang;
+                langSelect.addEventListener('change', (event) => {
+                    loadTranslations(event.target.value);
+                });
+            }
+            loadTranslations(savedLang); // Carica le traduzioni all'avvio
+
+            // --- FINE: Codice per la Traduzione ---
+
             console.log('DOM caricato');
             
             // Inizializza la mappa
