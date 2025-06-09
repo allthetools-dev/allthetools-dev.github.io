@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="it"> <head>
+<html lang="en"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-translate="tool_page_title">Calcolatore Punto Medio Geografico</title>
+    <title data-translate="tool_page_title">Geographic Midpoint Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" />
     <style>
         /* ... (Il tuo CSS esistente rimane invariato) ... */
@@ -342,63 +342,63 @@
 <body>
     <div class="container">
         <div class="language-selector">
-            <label for="language-select" data-translate="lang_select_label">Lingua:</label>
+            <label for="language-select" data-translate="lang_select_label">Language:</label>
             <select id="language-select">
-                <option value="it" data-translate="lang_italian">Italiano</option>
-                <option value="en" data-translate="lang_english">Inglese</option>
+                <option value="it" data-translate="lang_italian">🇮🇹 Italiano</option>
+                <option value="en" data-translate="lang_english">🇬🇧 English</option>
             </select>
         </div>
 
         <div class="header">
-            <h1 data-translate="tool_page_title">🌍 Calcolatore Punto Medio Geografico</h1>
-            <p data-translate="tool_page_description">Trova il punto medio geografico di più coordinate sulla mappa</p>
+            <h1 data-translate="tool_page_title">🌍 Geographic Midpoint Calculator</h1>
+            <p data-translate="tool_page_description">Find the geographic midpoint of multiple coordinates on a map</p>
         </div>
 
         <div class="content">
             <div class="left-panel">
                 <div class="input-section">
-                    <h3 data-translate="search_section_title">🔍 Cerca Luoghi</h3>
+                    <h3 data-translate="search_section_title">🔍 Search Places</h3>
                     <div class="search-container">
-                        <input type="text" id="searchInput" data-translate="search_input_placeholder" placeholder="es. Milano, Italia" autocomplete="off" />
+                        <input type="text" id="searchInput" data-translate="search_input_placeholder" placeholder="e.g. Milan, Italy" autocomplete="off" />
                         <div id="searchResults" class="search-results"></div>
                     </div>
-                    <p style="font-size: 0.9rem; color: #64748b; margin-top: 8px;" data-translate="search_info_text">Cerca un luogo per nome e selezionalo dalla lista</p>
+                    <p style="font-size: 0.9rem; color: #64748b; margin-top: 8px;" data-translate="search_info_text">Search for a place by name and select it from the list</p>
                 </div>
 
                 <div class="input-section">
-                    <h3 data-translate="manual_coords_title">📍 Inserisci Coordinate Manualmente</h3>
+                    <h3 data-translate="manual_coords_title">📍 Enter Coordinates Manually</h3>
                     <div class="coordinate-input">
-                        <label data-translate="label_latitude">Latitudine:</label>
-                        <input type="number" id="latInput" step="any" data-translate="input_lat_placeholder" placeholder="es. 45.4642" />
+                        <label data-translate="label_latitude">Latitude:</label>
+                        <input type="number" id="latInput" step="any" data-translate="input_lat_placeholder" placeholder="e.g. 45.4642" />
                     </div>
                     <div class="coordinate-input">
-                        <label data-translate="label_longitude">Longitudine:</label>
-                        <input type="number" id="lngInput" step="any" data-translate="input_lng_placeholder" placeholder="es. 9.1900" />
+                        <label data-translate="label_longitude">Longitude:</label>
+                        <input type="number" id="lngInput" step="any" data-translate="input_lng_placeholder" placeholder="e.g. 9.1900" />
                     </div>
                     <div>
-                        <button class="btn btn-add" onclick="addCoordinate()" data-translate="add_button">+ Aggiungi</button>
-                        <button class="btn" onclick="calculateMidpoint()" data-translate="calculate_button">🧮 Calcola Punto Medio</button>
+                        <button class="btn btn-add" onclick="addCoordinate()" data-translate="add_button">+ Add</button>
+                        <button class="btn" onclick="calculateMidpoint()" data-translate="calculate_button">🧮 Calculate Midpoint</button>
                     </div>
                     <div id="error" class="error" style="display: none;"></div>
                 </div>
 
                 <div class="input-section">
-                    <h3 data-translate="coords_list_title">📋 Coordinate Inserite (<span id="coordinateCount">0</span>)</h3>
+                    <h3 data-translate="coords_list_title">📋 Entered Coordinates (<span id="coordinateCount">0</span>)</h3>
                     <div class="coordinates-list" id="coordinatesList">
-                        <p style="text-align: center; color: #64748b; font-style: italic;" data-translate="coords_list_placeholder">Nessuna coordinata inserita</p>
+                        <p style="text-align: center; color: #64748b; font-style: italic;" data-translate="coords_list_placeholder">No coordinates entered</p>
                     </div>
                 </div>
 
                 <div id="results" class="results" style="display: none;">
-                    <h4 data-translate="midpoint_results_title">🎯 Punto Medio Calcolato</h4>
+                    <h4 data-translate="midpoint_results_title">🎯 Calculated Midpoint</h4>
                     <div class="coordinate-result">
-                        <strong data-translate="result_latitude">Latitudine:</strong> <span id="resultLat"></span>
+                        <strong data-translate="result_latitude">Latitude:</strong> <span id="resultLat"></span>
                     </div>
                     <div class="coordinate-result">
-                        <strong data-translate="result_longitude">Longitudine:</strong> <span id="resultLng"></span>
+                        <strong data-translate="result_longitude">Longitude:</strong> <span id="resultLng"></span>
                     </div>
                     <div class="coordinate-result">
-                        <strong data-translate="result_coordinates">Coordinate:</strong> <span id="resultCoords"></span>
+                        <strong data-translate="result_coordinates">Coordinates:</strong> <span id="resultCoords"></span>
                     </div>
                 </div>
             </div>
@@ -419,9 +419,9 @@
         let searchTimeout;
         let currentSearchResults = [];
 
-        // --- INIZIO: Codice per la Traduzione (COPIA QUI LO STESSO SCRIPT DI TRADUZIONE DELL'INDEX.HTML) ---
+        // --- INIZIO: Codice per la Traduzione ---
         const translations = {};
-        const defaultLanguage = 'en'; 
+        const defaultLanguage = 'en'; // Lingua predefinita ora è inglese
 
         async function loadTranslations(lang) {
             try {
@@ -436,6 +436,7 @@
                 localStorage.setItem('lang', lang);
             } catch (error) {
                 console.error("Error loading translations:", error);
+                // Fallback alla lingua predefinita o a un messaggio di errore se il file non viene trovato
             }
         }
 
@@ -452,13 +453,19 @@
                     }
                 }
             });
-            // Aggiorna le opzioni del selettore lingua e gli errori di Leaflet/map
+            // Aggiorna anche le opzioni del selettore lingua per essere sicuri
             const langSelect = document.getElementById('language-select');
             if (langSelect) {
                 Array.from(langSelect.options).forEach(option => {
                     const key = option.getAttribute('data-translate');
                     if (translations[key]) {
-                        option.textContent = translations[key];
+                        // Non sovrascrivere il testo se contiene già la bandiera
+                        if (!option.textContent.includes('🇮🇹') && !option.textContent.includes('🇬🇧')) {
+                            option.textContent = (option.value === 'it' ? '🇮🇹 ' : '🇬🇧 ') + translations[key];
+                        } else {
+                            // Se contiene già la bandiera, aggiorna solo il testo senza duplicare la bandiera
+                            option.textContent = option.textContent.split(' ')[0] + ' ' + translations[key];
+                        }
                     }
                 });
             }
@@ -525,13 +532,13 @@
                         results = nominatimResults;
                     } catch (nominatimError) {
                         console.error("Nominatim fallback fallito:", nominatimError);
-                        showSearchError(translations['search_error_not_available'] || "La ricerca automatica non è disponibile. Inserisci le coordinate manualmente.");
+                        showSearchError(translations['search_error_not_available'] || "Automatic search is not available. Please enter coordinates manually.");
                         return;
                     }
                 }
 
                 if (!Array.isArray(results) || results.length === 0) {
-                    showSearchError(translations['search_error_no_results'] || "Nessun risultato trovato. Riprova con un nome diverso o inserisci le coordinate manualmente.");
+                    showSearchError(translations['search_error_no_results'] || "No results found. Try a different name or enter coordinates manually.");
                     return;
                 }
 
@@ -540,14 +547,14 @@
 
             } catch (error) {
                 console.error("Errore generico nella ricerca:", error);
-                showSearchError(translations['search_error_generic'] || "Si è verificato un errore durante la ricerca. Riprova più tardi.");
+                showSearchError(translations['search_error_generic'] || "An error occurred during the search. Please try again later.");
             }
         }
 
         async function fetchNominatimFallback(query) {
             try {
                 const response = await fetch(
-                    `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(query)}&addressdetails=1&accept-language=${document.documentElement.lang || 'it'}`, // Usa la lingua corrente
+                    `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(query)}&addressdetails=1&accept-language=${document.documentElement.lang || 'en'}`, // Usa la lingua corrente
                     {
                         headers: {
                             'User-Agent': 'Geographic Midpoint Calculator / 1.0 (your-email@example.com)' // Sostituisci con la tua email
@@ -557,9 +564,9 @@
 
                 if (!response.ok) {
                     if (response.status === 429) {
-                        throw new Error(translations['search_error_too_many_requests'] || "Troppe richieste. Riprova tra un po'.");
+                        throw new Error(translations['search_error_too_many_requests'] || "Too many requests. Please try again later.");
                     }
-                    throw new Error(`${translations['search_error_generic'] || 'Errore Nominatim'}: ${response.statusText}`);
+                    throw new Error(`${translations['search_error_generic'] || 'Nominatim error'}: ${response.statusText}`);
                 }
 
                 const results = await response.json();
@@ -578,7 +585,7 @@
         // Mostra indicatore di caricamento
         function showLoadingIndicator() {
             const resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = `<div class="loading-indicator">${translations['search_loading'] || '🔍 Ricerca in corso...'}</div>`;
+            resultsDiv.innerHTML = `<div class="loading-indicator">${translations['search_loading'] || '🔍 Searching...'}</div>`;
             resultsDiv.style.display = 'block';
         }
 
@@ -599,7 +606,7 @@
             const resultsDiv = document.getElementById('searchResults');
             
             if (results.length === 0) {
-                resultsDiv.innerHTML = `<div class="loading-indicator">${translations['search_error_no_results'] || 'Nessun risultato trovato.'}</div>`;
+                resultsDiv.innerHTML = `<div class="loading-indicator">${translations['search_error_no_results'] || 'No results found.'}</div>`;
                 resultsDiv.style.display = 'block';
                 return;
             }
@@ -647,7 +654,7 @@
             const lng = parseFloat(result.lon);
             
             if (isNaN(lat) || isNaN(lng)) {
-                showError(translations['search_error_invalid_coords_for_result'] || 'Coordinate non valide per questo risultato');
+                showError(translations['search_error_invalid_coords_for_result'] || 'Invalid coordinates for this result');
                 return;
             }
             
@@ -685,17 +692,17 @@
 
             // Validazione input
             if (isNaN(lat) || isNaN(lng)) {
-                showError(translations['error_manual_coords_invalid'] || 'Inserisci valori numerici validi per latitudine e longitudine');
+                showError(translations['error_manual_coords_invalid'] || 'Please enter valid numeric values for latitude and longitude');
                 return;
             }
 
             if (lat < -90 || lat > 90) {
-                showError(translations['error_latitude_range'] || 'La latitudine deve essere tra -90 e 90 gradi');
+                showError(translations['error_latitude_range'] || 'Latitude must be between -90 and 90 degrees');
                 return;
             }
 
             if (lng < -180 || lng > 180) {
-                showError(translations['error_longitude_range'] || 'La longitudine deve essere tra -180 e 180 gradi');
+                showError(translations['error_longitude_range'] || 'Longitude must be between -180 and 180 degrees');
                 return;
             }
 
@@ -732,12 +739,12 @@
             count.textContent = coordinates.length;
 
             if (coordinates.length === 0) {
-                list.innerHTML = `<p style="text-align: center; color: #64748b; font-style: italic;" data-translate="coords_list_placeholder">${translations['coords_list_placeholder'] || 'Nessuna coordinata inserita'}</p>`;
+                list.innerHTML = `<p style="text-align: center; color: #64748b; font-style: italic;" data-translate="coords_list_placeholder">${translations['coords_list_placeholder'] || 'No coordinates entered'}</p>`;
                 return;
             }
 
             list.innerHTML = coordinates.map((coord, index) => {
-                const displayName = coord.name || `${(translations['tool_page_title'].split(' ')[0] || 'Punto')} ${index + 1}`; // Usare un nome tradotto per "Punto"
+                const displayName = coord.name || `${(translations['tool_page_title'].split(' ')[0] || 'Point')} ${index + 1}`; // Usare un nome tradotto per "Punto"
                 const coordString = `${coord.lat.toFixed(6)}, ${coord.lng.toFixed(6)}`;
                 
                 return `
@@ -763,7 +770,7 @@
         // Aggiungi marker alla mappa
         function addMarkerToMap(lat, lng) {
             if (!leafletLoaded || typeof L === 'undefined') {
-                console.log(translations['map_not_ready_marker'] || 'Mappa non ancora pronta per aggiungere marker');
+                console.log(translations['map_not_ready_marker'] || 'Map not ready to add marker');
                 return;
             }
             
@@ -786,7 +793,7 @@
         // Aggiorna mappa
         function updateMap() {
             if (!leafletLoaded || typeof L === 'undefined') {
-                console.log(translations['map_not_ready_update'] || 'Mappa non ancora pronta per l\'aggiornamento');
+                console.log(translations['map_not_ready_update'] || 'Map not ready for update');
                 return;
             }
             
@@ -824,7 +831,7 @@
         // Calcola punto medio geografico
         function calculateMidpoint() {
             if (coordinates.length < 2) {
-                showError(translations['error_min_coords'] || 'Inserisci almeno 2 coordinate per calcolare il punto medio');
+                showError(translations['error_min_coords'] || 'Please enter at least 2 coordinates to calculate the midpoint');
                 return;
             }
 
@@ -848,7 +855,7 @@
 
             // Caso speciale: se siamo vicini al centro della terra
             if (Math.abs(x) < 1e-9 && Math.abs(y) < 1e-9 && Math.abs(z) < 1e-9) {
-                showError(translations['error_coords_too_dispersed'] || 'Le coordinate sono troppo disperse per calcolare un punto medio significativo');
+                showError(translations['error_coords_too_dispersed'] || 'Coordinates are too dispersed to calculate a meaningful midpoint');
                 return;
             }
 
@@ -877,7 +884,7 @@
         // Aggiungi punto medio alla mappa
         function addMidpointToMap(lat, lng) {
             if (!leafletLoaded || typeof L === 'undefined') {
-                console.log(translations['map_not_ready_midpoint'] || 'Mappa non ancora pronta per aggiungere il punto medio');
+                console.log(translations['map_not_ready_midpoint'] || 'Map not ready to add midpoint');
                 return;
             }
             
@@ -896,7 +903,7 @@
 
                 midpointMarker = L.marker([lat, lng], { icon: midpointIcon })
                     .addTo(map)
-                    .bindPopup(`<strong>${translations['midpoint_popup_title'] || '🎯 Punto Medio Geografico'}</strong><br>Lat: ${lat.toFixed(6)}<br>Lng: ${lng.toFixed(6)}`);
+                    .bindPopup(`<strong>${translations['midpoint_popup_title'] || '🎯 Geographic Midpoint'}</strong><br>Lat: ${lat.toFixed(6)}<br>Lng: ${lng.toFixed(6)}`);
 
                 // Adatta vista per includere tutti i punti
                 const allMarkers = [...markers, midpointMarker];
