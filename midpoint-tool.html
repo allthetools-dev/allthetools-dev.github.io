@@ -671,6 +671,7 @@
             hideError();
 
             // Aggiorna visualizzazione
+            console.log('Coordinate added via search:', { lat, lng, name: result.display_name.split(',')[0].trim() }); // DEBUG LOG
             updateCoordinatesList();
             addMarkerToMap(lat, lng);
         }
@@ -715,6 +716,7 @@
             hideError();
 
             // Aggiorna visualizzazione
+            console.log('Coordinate added manually:', { lat, lng }); // DEBUG LOG
             updateCoordinatesList();
             addMarkerToMap(lat, lng);
         }
@@ -736,14 +738,17 @@
             const list = document.getElementById('coordinatesList');
             const count = document.getElementById('coordinateCount');
             
+            console.log('updateCoordinatesList called. Current coordinates array:', coordinates); // DEBUG LOG
+            
             count.textContent = coordinates.length;
 
             if (coordinates.length === 0) {
                 list.innerHTML = `<p style="text-align: center; color: #64748b; font-style: italic;" data-translate="coords_list_placeholder">${translations['coords_list_placeholder'] || 'No coordinates entered'}</p>`;
+                console.log('List cleared: No coordinates present.'); // DEBUG LOG
                 return;
             }
 
-            list.innerHTML = coordinates.map((coord, index) => {
+            const newHtml = coordinates.map((coord, index) => {
                 const displayName = coord.name || `${(translations['tool_page_title'].split(' ')[0] || 'Point')} ${index + 1}`; // Usare un nome tradotto per "Punto"
                 const coordString = `${coord.lat.toFixed(6)}, ${coord.lng.toFixed(6)}`;
                 
@@ -757,12 +762,16 @@
                     </div>
                 `;
             }).join('');
-            applyTranslations(); // Applica traduzioni anche ai nuovi elementi dinamici se necessario
+            
+            list.innerHTML = newHtml;
+            console.log('List HTML updated. New HTML:', newHtml); // DEBUG LOG
+            // Removed applyTranslations() here as it's not needed for dynamically created elements without data-translate
         }
 
         // Rimuovi coordinata
         function removeCoordinate(index) {
             coordinates.splice(index, 1);
+            console.log('Coordinate removed. New coordinates array:', coordinates); // DEBUG LOG
             updateCoordinatesList();
             updateMap();
         }
