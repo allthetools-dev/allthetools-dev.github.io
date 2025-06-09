@@ -5,6 +5,7 @@
     <title data-translate="tool_page_title">Geographic Midpoint Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" />
     <style>
+        /* CSS COMPLETO PER MIDPOINT-TOOL.HTML */
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +13,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -309,16 +310,16 @@
             .content {
                 grid-template-columns: 1fr;
             }
-            
+
             .header h1 {
                 font-size: 2rem;
             }
-            
+
             .coordinate-input {
                 flex-direction: column;
                 align-items: stretch;
             }
-            
+
             .coordinate-input label {
                 min-width: auto;
                 margin-bottom: 5px;
@@ -482,7 +483,7 @@
                 setTimeout(initMap, 100);
                 return;
             }
-            
+
             try {
                 map = L.map('map').setView([45.4642, 9.1900], 6);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -553,7 +554,7 @@
         async function fetchNominatimFallback(query) {
             try {
                 const response = await fetch(
-                    `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(query)}&addressdetails=1&accept-language=${document.documentElement.lang || 'en'}`, // Usa la lingua corrente
+                    `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=<span class="math-inline">\{encodeURIComponent\(query\)\}&addressdetails\=1&accept\-language\=</span>{document.documentElement.lang || 'en'}`, // Usa la lingua corrente
                     {
                         headers: {
                             'User-Agent': 'Geographic Midpoint Calculator / 1.0 (your-email@example.com)' // Sostituisci con la tua email
@@ -593,7 +594,7 @@
             const resultsDiv = document.getElementById('searchResults');
             resultsDiv.innerHTML = `<div class="loading-indicator" style="color: #dc2626;">❌ ${message}</div>`;
             resultsDiv.style.display = 'block';
-            
+
             // Nascondi automaticamente dopo 5 secondi
             setTimeout(() => {
                 hideSearchResults();
@@ -603,7 +604,7 @@
         // Mostra risultati di ricerca
         function displaySearchResults(results) {
             const resultsDiv = document.getElementById('searchResults');
-            
+
             if (results.length === 0) {
                 resultsDiv.innerHTML = `<div class="loading-indicator">${translations['search_error_no_results'] || 'No results found.'}</div>`;
                 resultsDiv.style.display = 'block';
@@ -616,14 +617,14 @@
                 const mainName = parts[0];
                 // Mostra solo le prime 3 parti per non rendere il dettaglio troppo lungo
                 const details = parts.slice(1, 4).join(', ').trim(); 
-                
+
                 return `
-                    <div class="search-result-item" data-index="${index}">
-                        <div class="search-result-name">${mainName}</div>
-                        <div class="search-result-details">${details}</div>
-                    </div>
-                `;
-            }).join('');
+                    <div class="search-result-item" data-index="<span class="math-inline">\{index\}"\>
+<div class="search-result-name">{mainName}</div>
+<div class="search-result-details">${details}</div>
+</div>
+`;
+}).join('');
 
             resultsDiv.innerHTML = resultsHtml;
             resultsDiv.style.display = 'block';
@@ -765,14 +766,14 @@
                 return `
                     <div class="coordinate-item">
                         <div>
-                            <strong>${index + 1}.</strong> ${displayName}
-                            <div style="font-size: 0.85rem; color: #64748b; margin-top: 2px;">${coordString}</div>
-                        </div>
-                        <button class="remove-btn" onclick="removeCoordinate(${index})">✕</button>
-                    </div>
-                `;
-            }).join('');
-            
+                            <strong>${index + 1}.</strong> <span class="math-inline">\{displayName\}
+<div style="font-size: 0.85rem; color: #64748b; margin-top: 2px;">{coordString}</div>
+</div>
+<button class="remove-btn" onclick="removeCoordinate(${index})">✕</button>
+</div>
+`;
+}).join('');
+
             list.innerHTML = newHtml;
             console.log('List HTML updated. New HTML:', newHtml); // DEBUG LOG
             // applyTranslations(); // Rimosso: gli elementi dinamici non hanno data-translate
