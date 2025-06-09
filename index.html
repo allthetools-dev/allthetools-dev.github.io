@@ -3,879 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcolatore Punto Medio Geografico</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" />
+    <title>AllTheTools - La tua suite di strumenti utili</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            text-align: center;
         }
-
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            padding: 40px 30px;
+            max-width: 800px;
+            margin: 20px;
             backdrop-filter: blur(10px);
         }
-
-        .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+        h1 {
+            font-size: 3rem;
+            color: #4facfe;
+            margin-bottom: 20px;
             font-weight: 700;
         }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-            min-height: 600px;
-        }
-
-        .left-panel {
-            padding: 30px;
-            background: #f8fafc;
-            border-right: 1px solid #e2e8f0;
-        }
-
-        .right-panel {
-            padding: 30px;
-        }
-
-        .input-section {
-            margin-bottom: 30px;
-        }
-
-        .input-section h3 {
-            color: #2d3748;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        .coordinate-input {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            align-items: center;
-        }
-
-        .coordinate-input input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .coordinate-input input:focus {
-            outline: none;
-            border-color: #4facfe;
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
-        }
-
-        .coordinate-input label {
-            min-width: 80px;
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .remove-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .remove-btn:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-add {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            margin-right: 10px;
-        }
-
-        .btn-add:hover {
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-        }
-
-        .results {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-            border-left: 4px solid #0ea5e9;
-        }
-
-        .results h4 {
-            color: #0c4a6e;
-            margin-bottom: 10px;
+        p {
             font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #555;
         }
-
-        .coordinate-result {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin: 5px 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
         }
-
-        .coordinate-result strong {
-            color: #1e40af;
-        }
-
-        #map {
-            height: 100%;
-            min-height: 400px;
+        .tool-card {
+            background: #fff;
             border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
-
-        .error {
-            color: #dc2626;
-            background: #fef2f2;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            border-left: 4px solid #dc2626;
-        }
-
-        .coordinates-list {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 15px;
-            background: white;
-        }
-
-        .coordinate-item {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            padding: 8px;
-            border-bottom: 1px solid #f1f5f9;
-            transition: background-color 0.2s ease;
+            justify-content: center;
         }
-
-        .coordinate-item:hover {
-            background-color: #f8fafc;
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
         }
-
-        .search-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .search-container input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-container input:focus {
-            outline: none;
-            border-color: #4facfe;
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
-        }
-
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            max-height: 250px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-        }
-
-        .search-result-item {
-            padding: 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #f1f5f9;
-            transition: background-color 0.2s ease;
-        }
-
-        .search-result-item:hover {
-            background-color: #f8fafc;
-        }
-
-        .search-result-item:last-child {
-            border-bottom: none;
-        }
-
-        .search-result-name {
+        .tool-card h2 {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-top: 15px;
+            margin-bottom: 10px;
             font-weight: 600;
-            color: #1e40af;
-            margin-bottom: 2px;
         }
-
-        .search-result-details {
-            font-size: 0.85rem;
-            color: #64748b;
+        .tool-card p {
+            font-size: 0.95rem;
+            color: #777;
+            margin-bottom: 0;
         }
-
-        .loading-indicator {
-            padding: 15px;
-            text-align: center;
-            color: #64748b;
-            font-style: italic;
+        .tool-icon {
+            font-size: 3.5rem;
+            color: #4facfe;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 768px) {
-            .content {
+            h1 {
+                font-size: 2.5rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+            .tool-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .coordinate-input {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .coordinate-input label {
-                min-width: auto;
-                margin-bottom: 5px;
+            .container {
+                padding: 30px 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🌍 Calcolatore Punto Medio Geografico</h1>
-            <p>Trova il punto medio geografico di più coordinate sulla mappa</p>
-        </div>
+        <h1>AllTheTools</h1>
+        <p>La tua suite di strumenti utili per la vita quotidiana, sviluppati con passione e precisione. Esplora i nostri tool:</p>
 
-        <div class="content">
-            <div class="left-panel">
-                <div class="input-section">
-                    <h3>🔍 Cerca Luoghi</h3>
-                    <div class="search-container">
-                        <input type="text" id="searchInput" placeholder="es. Milano, Italia" autocomplete="off" />
-                        <div id="searchResults" class="search-results"></div>
-                    </div>
-                    <p style="font-size: 0.9rem; color: #64748b; margin-top: 8px;">Cerca un luogo per nome e selezionalo dalla lista</p>
-                </div>
-
-                <div class="input-section">
-                    <h3>📍 Inserisci Coordinate Manualmente</h3>
-                    <div class="coordinate-input">
-                        <label>Latitudine:</label>
-                        <input type="number" id="latInput" step="any" placeholder="es. 45.4642" />
-                    </div>
-                    <div class="coordinate-input">
-                        <label>Longitudine:</label>
-                        <input type="number" id="lngInput" step="any" placeholder="es. 9.1900" />
-                    </div>
-                    <div>
-                        <button class="btn btn-add" onclick="addCoordinate()">+ Aggiungi</button>
-                        <button class="btn" onclick="calculateMidpoint()">🧮 Calcola Punto Medio</button>
-                    </div>
-                    <div id="error" class="error" style="display: none;"></div>
-                </div>
-
-                <div class="input-section">
-                    <h3>📋 Coordinate Inserite (<span id="coordinateCount">0</span>)</h3>
-                    <div class="coordinates-list" id="coordinatesList">
-                        <p style="text-align: center; color: #64748b; font-style: italic;">Nessuna coordinata inserita</p>
-                    </div>
-                </div>
-
-                <div id="results" class="results" style="display: none;">
-                    <h4>🎯 Punto Medio Calcolato</h4>
-                    <div class="coordinate-result">
-                        <strong>Latitudine:</strong> <span id="resultLat"></span>
-                    </div>
-                    <div class="coordinate-result">
-                        <strong>Longitudine:</strong> <span id="resultLng"></span>
-                    </div>
-                    <div class="coordinate-result">
-                        <strong>Coordinate:</strong> <span id="resultCoords"></span>
-                    </div>
-                </div>
+        <div class="tool-grid">
+            <a href="midpoint-tool.html" class="tool-card">
+                <span class="tool-icon">🌍</span>
+                <h2>Calcolatore Punto Medio Geografico</h2>
+                <p>Trova il punto medio geografico di più coordinate sulla mappa.</p>
+            </a>
             </div>
-
-            <div class="right-panel">
-                <div id="map"></div>
-            </div>
-        </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js"></script>
-    <script>
-        let coordinates = [];
-        let map;
-        let markers = [];
-        let midpointMarker;
-        let leafletLoaded = false;
-        let searchTimeout;
-        let currentSearchResults = [];
-
-        // Inizializza la mappa
-        function initMap() {
-            if (typeof L === 'undefined') {
-                console.log('Leaflet non ancora caricato, riprovo...');
-                setTimeout(initMap, 100);
-                return;
-            }
-            
-            try {
-                map = L.map('map').setView([45.4642, 9.1900], 6);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
-                }).addTo(map);
-                leafletLoaded = true;
-                console.log('Mappa inizializzata correttamente');
-            } catch (error) {
-                console.error('Errore nell\'inizializzazione della mappa:', error);
-                setTimeout(initMap, 200);
-            }
-        }
-
-        // Cerca luoghi usando Nominatim API
-        async function searchPlaces(query) {
-            if (query.length < 3) {
-                hideSearchResults();
-                return;
-            }
-
-            try {
-                showLoadingIndicator();
-                let results = [];
-
-                // Tentativo con Photon API
-                try {
-                    let response = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`);
-                    if (!response.ok) throw new Error("Photon API failed");
-                    const data = await response.json();
-                    results = data.features.map(feature => ({
-                        display_name: feature.properties.name + 
-                            (feature.properties.city ? `, ${feature.properties.city}` : '') + 
-                            (feature.properties.country ? `, ${feature.properties.country}` : ''),
-                        lat: feature.geometry.coordinates[1],
-                        lon: feature.geometry.coordinates[0]
-                    }));
-                } catch (photonError) {
-                    console.warn("Photon API non disponibile o fallita:", photonError);
-                }
-
-                // Se Photon ha dato 0 risultati o è fallito, fallback su Nominatim
-                if (results.length === 0) {
-                    console.log("Nessun risultato da Photon o Photon fallito. Provo Nominatim...");
-                    try {
-                        const nominatimResults = await fetchNominatimFallback(query);
-                        results = nominatimResults;
-                    } catch (nominatimError) {
-                        console.error("Nominatim fallback fallito:", nominatimError);
-                        showSearchError("La ricerca automatica non è disponibile. Inserisci le coordinate manualmente.");
-                        return;
-                    }
-                }
-
-                if (!Array.isArray(results) || results.length === 0) {
-                    showSearchError("Nessun risultato trovato. Riprova con un nome diverso o inserisci le coordinate manualmente.");
-                    return;
-                }
-
-                currentSearchResults = results;
-                displaySearchResults(results);
-
-            } catch (error) {
-                console.error("Errore generico nella ricerca:", error);
-                showSearchError("Si è verificato un errore durante la ricerca. Riprova più tardi.");
-            }
-        }
-
-        async function fetchNominatimFallback(query) {
-            try {
-                const response = await fetch(
-                    `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(query)}&addressdetails=1&accept-language=it`,
-                    {
-                        headers: {
-                            'User-Agent': 'Geographic Midpoint Calculator / 1.0 (your-email@example.com)' // Sostituisci con la tua email
-                        }
-                    }
-                );
-
-                if (!response.ok) {
-                    if (response.status === 429) {
-                        throw new Error("Troppe richieste. Riprova tra un po'.");
-                    }
-                    throw new Error(`Errore Nominatim: ${response.statusText}`);
-                }
-
-                const results = await response.json();
-
-                return results.map(result => ({
-                    display_name: result.display_name,
-                    lat: parseFloat(result.lat),
-                    lon: parseFloat(result.lon)
-                }));
-            } catch (e) {
-                console.error("Errore nel fallback Nominatim:", e);
-                throw e; // Rilancia l'errore per gestirlo in searchPlaces
-            }
-        }
-
-        // Mostra indicatore di caricamento
-        function showLoadingIndicator() {
-            const resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = '<div class="loading-indicator">🔍 Ricerca in corso...</div>';
-            resultsDiv.style.display = 'block';
-        }
-
-        // Mostra errore di ricerca
-        function showSearchError(message) {
-            const resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = `<div class="loading-indicator" style="color: #dc2626;">❌ ${message}</div>`;
-            resultsDiv.style.display = 'block';
-            
-            // Nascondi automaticamente dopo 5 secondi
-            setTimeout(() => {
-                hideSearchResults();
-            }, 5000);
-        }
-
-        // Mostra risultati di ricerca
-        function displaySearchResults(results) {
-            const resultsDiv = document.getElementById('searchResults');
-            
-            if (results.length === 0) {
-                resultsDiv.innerHTML = '<div class="loading-indicator">Nessun risultato trovato.</div>';
-                resultsDiv.style.display = 'block';
-                return;
-            }
-
-            const resultsHtml = results.map((result, index) => {
-                const displayName = result.display_name;
-                const parts = displayName.split(',');
-                const mainName = parts[0];
-                // Mostra solo le prime 3 parti per non rendere il dettaglio troppo lungo
-                const details = parts.slice(1, 4).join(', ').trim(); 
-                
-                return `
-                    <div class="search-result-item" data-index="${index}">
-                        <div class="search-result-name">${mainName}</div>
-                        <div class="search-result-details">${details}</div>
-                    </div>
-                `;
-            }).join('');
-
-            resultsDiv.innerHTML = resultsHtml;
-            resultsDiv.style.display = 'block';
-            
-            // Aggiungi event listeners ai risultati
-            const resultItems = resultsDiv.querySelectorAll('.search-result-item');
-            resultItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const index = parseInt(this.getAttribute('data-index'));
-                    selectSearchResult(index);
-                });
-                
-                item.addEventListener('mousedown', function(e) {
-                    e.preventDefault(); // Previene la perdita di focus dell'input
-                });
-            });
-        }
-
-        // Seleziona un risultato di ricerca
-        function selectSearchResult(index) {
-            if (!currentSearchResults[index]) return;
-            
-            const result = currentSearchResults[index];
-            const lat = parseFloat(result.lat);
-            const lng = parseFloat(result.lon);
-            
-            if (isNaN(lat) || isNaN(lng)) {
-                showError('Coordinate non valide per questo risultato');
-                return;
-            }
-            
-            // Aggiungi coordinata
-            coordinates.push({ 
-                lat, 
-                lng, 
-                name: result.display_name.split(',')[0].trim() 
-            });
-            
-            // Pulisci input di ricerca
-            document.getElementById('searchInput').value = '';
-            hideSearchResults();
-            hideError();
-
-            // Aggiorna visualizzazione
-            updateCoordinatesList();
-            addMarkerToMap(lat, lng);
-        }
-
-        // Nascondi risultati di ricerca
-        function hideSearchResults() {
-            const resultsDiv = document.getElementById('searchResults');
-            resultsDiv.style.display = 'none';
-            resultsDiv.innerHTML = '';
-        }
-
-        // Aggiungi una coordinata
-        function addCoordinate() {
-            const latInput = document.getElementById('latInput');
-            const lngInput = document.getElementById('lngInput');
-
-            const lat = parseFloat(latInput.value);
-            const lng = parseFloat(lngInput.value);
-
-            // Validazione input
-            if (isNaN(lat) || isNaN(lng)) {
-                showError('Inserisci valori numerici validi per latitudine e longitudine');
-                return;
-            }
-
-            if (lat < -90 || lat > 90) {
-                showError('La latitudine deve essere tra -90 e 90 gradi');
-                return;
-            }
-
-            if (lng < -180 || lng > 180) {
-                showError('La longitudine deve essere tra -180 e 180 gradi');
-                return;
-            }
-
-            // Aggiungi coordinata
-            coordinates.push({ lat, lng });
-            
-            // Pulisci input
-            latInput.value = '';
-            lngInput.value = '';
-            hideError();
-
-            // Aggiorna visualizzazione
-            updateCoordinatesList();
-            addMarkerToMap(lat, lng);
-        }
-
-        // Mostra errore
-        function showError(message) {
-            const errorDiv = document.getElementById('error');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
-
-        // Nascondi errore
-        function hideError() {
-            document.getElementById('error').style.display = 'none';
-        }
-
-        // Aggiorna lista coordinate
-        function updateCoordinatesList() {
-            const list = document.getElementById('coordinatesList');
-            const count = document.getElementById('coordinateCount');
-            
-            count.textContent = coordinates.length;
-
-            if (coordinates.length === 0) {
-                list.innerHTML = '<p style="text-align: center; color: #64748b; font-style: italic;">Nessuna coordinata inserita</p>';
-                return;
-            }
-
-            list.innerHTML = coordinates.map((coord, index) => {
-                const displayName = coord.name || `Punto ${index + 1}`;
-                const coordString = `${coord.lat.toFixed(6)}, ${coord.lng.toFixed(6)}`;
-                
-                return `
-                    <div class="coordinate-item">
-                        <div>
-                            <strong>${index + 1}.</strong> ${displayName}
-                            <div style="font-size: 0.85rem; color: #64748b; margin-top: 2px;">${coordString}</div>
-                        </div>
-                        <button class="remove-btn" onclick="removeCoordinate(${index})">✕</button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Rimuovi coordinata
-        function removeCoordinate(index) {
-            coordinates.splice(index, 1);
-            updateCoordinatesList();
-            updateMap();
-        }
-
-        // Aggiungi marker alla mappa
-        function addMarkerToMap(lat, lng) {
-            if (!leafletLoaded || typeof L === 'undefined') {
-                console.log('Mappa non ancora pronta per aggiungere marker');
-                return;
-            }
-            
-            try {
-                const marker = L.marker([lat, lng]).addTo(map);
-                markers.push(marker);
-                
-                // Adatta la vista per includere tutti i marker
-                if (coordinates.length > 1) {
-                    const group = new L.featureGroup(markers);
-                    map.fitBounds(group.getBounds().pad(0.1));
-                } else {
-                    map.setView([lat, lng], 10);
-                }
-            } catch (error) {
-                console.error('Errore nell\'aggiunta del marker:', error);
-            }
-        }
-
-        // Aggiorna mappa
-        function updateMap() {
-            if (!leafletLoaded || typeof L === 'undefined') {
-                console.log('Mappa non ancora pronta per l\'aggiornamento');
-                return;
-            }
-            
-            try {
-                // Rimuovi tutti i marker
-                markers.forEach(marker => map.removeLayer(marker));
-                markers = [];
-                
-                if (midpointMarker) {
-                    map.removeLayer(midpointMarker);
-                    midpointMarker = null;
-                }
-
-                // Aggiungi marker per ogni coordinata
-                coordinates.forEach(coord => {
-                    const marker = L.marker([coord.lat, coord.lng]).addTo(map);
-                    markers.push(marker);
-                });
-
-                // Adatta vista se ci sono coordinate
-                if (coordinates.length > 0) {
-                    const group = new L.featureGroup(markers);
-                    map.fitBounds(group.getBounds().pad(0.1));
-                }
-
-                // Nascondi risultati se non ci sono abbastanza coordinate
-                if (coordinates.length < 2) {
-                    document.getElementById('results').style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Errore nell\'aggiornamento della mappa:', error);
-            }
-        }
-
-        // Calcola punto medio geografico
-        function calculateMidpoint() {
-            if (coordinates.length < 2) {
-                showError('Inserisci almeno 2 coordinate per calcolare il punto medio');
-                return;
-            }
-
-            let x = 0, y = 0, z = 0;
-
-            // Converti ogni coordinata in coordinate cartesiane e somma
-            coordinates.forEach(coord => {
-                const latRad = coord.lat * Math.PI / 180;
-                const lngRad = coord.lng * Math.PI / 180;
-
-                x += Math.cos(latRad) * Math.cos(lngRad);
-                y += Math.cos(latRad) * Math.sin(lngRad);
-                z += Math.sin(latRad);
-            });
-
-            // Calcola la media
-            const total = coordinates.length;
-            x /= total;
-            y /= total;
-            z /= total;
-
-            // Caso speciale: se siamo vicini al centro della terra
-            if (Math.abs(x) < 1e-9 && Math.abs(y) < 1e-9 && Math.abs(z) < 1e-9) {
-                showError('Le coordinate sono troppo disperse per calcolare un punto medio significativo');
-                return;
-            }
-
-            // Converti coordinate cartesiane medie in lat/lng
-            const lngRad = Math.atan2(y, x);
-            const hyp = Math.sqrt(x * x + y * y);
-            const latRad = Math.atan2(z, hyp);
-
-            const midLat = latRad * 180 / Math.PI;
-            const midLng = lngRad * 180 / Math.PI;
-
-            // Mostra risultati
-            displayResults(midLat, midLng);
-            addMidpointToMap(midLat, midLng);
-            hideError();
-        }
-
-        // Mostra risultati
-        function displayResults(lat, lng) {
-            document.getElementById('resultLat').textContent = lat.toFixed(6);
-            document.getElementById('resultLng').textContent = lng.toFixed(6);
-            document.getElementById('resultCoords').textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-            document.getElementById('results').style.display = 'block';
-        }
-
-        // Aggiungi punto medio alla mappa
-        function addMidpointToMap(lat, lng) {
-            if (!leafletLoaded || typeof L === 'undefined') {
-                console.log('Mappa non ancora pronta per aggiungere il punto medio');
-                return;
-            }
-            
-            try {
-                // Rimuovi marker precedente del punto medio
-                if (midpointMarker) {
-                    map.removeLayer(midpointMarker);
-                }
-
-                // Crea icona personalizzata per il punto medio
-                const midpointIcon = L.divIcon({
-                    html: '<div style="background: #ef4444; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"></div>',
-                    iconSize: [20, 20],
-                    iconAnchor: [10, 10]
-                });
-
-                midpointMarker = L.marker([lat, lng], { icon: midpointIcon })
-                    .addTo(map)
-                    .bindPopup(`<strong>🎯 Punto Medio Geografico</strong><br>Lat: ${lat.toFixed(6)}<br>Lng: ${lng.toFixed(6)}`);
-
-                // Adatta vista per includere tutti i punti
-                const allMarkers = [...markers, midpointMarker];
-                const group = new L.featureGroup(allMarkers);
-                map.fitBounds(group.getBounds().pad(0.1));
-            } catch (error) {
-                console.error('Errore nell\'aggiunta del punto medio:', error);
-            }
-        }
-
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM caricato');
-            
-            // Inizializza la mappa
-            setTimeout(initMap, 100);
-            
-            // Event listeners per gli input
-            const latInput = document.getElementById('latInput');
-            const lngInput = document.getElementById('lngInput');
-            const searchInput = document.getElementById('searchInput');
-            
-            if (latInput) {
-                latInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        lngInput.focus();
-                    }
-                });
-            }
-
-            if (lngInput) {
-                lngInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        addCoordinate();
-                    }
-                });
-            }
-
-            if (searchInput) {
-                // Ricerca mentre si digita (debounced)
-                searchInput.addEventListener('input', function(e) {
-                    clearTimeout(searchTimeout);
-                    const query = e.target.value.trim();
-                    
-                    if (query.length < 3) {
-                        hideSearchResults();
-                        return;
-                    }
-                    
-                    searchTimeout = setTimeout(() => {
-                        searchPlaces(query);
-                    }, 500); // Aumentato il delay per ridurre le chiamate
-                });
-
-                // Gestione focus
-                searchInput.addEventListener('focus', function() {
-                    const query = this.value.trim();
-                    if (query.length >= 3 && currentSearchResults.length > 0) {
-                        displaySearchResults(currentSearchResults);
-                    }
-                });
-
-                // Gestione della tastiera
-                searchInput.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        hideSearchResults();
-                        this.blur();
-                    }
-                });
-            }
-
-            // Chiudi dropdown quando si clicca fuori
-            document.addEventListener('click', function(e) {
-                const searchContainer = document.querySelector('.search-container');
-                if (!searchContainer.contains(e.target)) {
-                    hideSearchResults();
-                }
-            });
-        });
-    </script>
 </body>
 </html>
